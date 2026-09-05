@@ -1,0 +1,8 @@
+{
+  "schema": 1,
+  "release_tag": "v1.3.0",
+  "assets": {
+    "RouteCache-win-x64-cuda-fallback.zip": "7a0803c16456c90095a99c776339ab975c67c87956956892e256b0a1f07d75c7",
+    "RouteCache-win-x64-repro-tools.zip": "b25f1d227d05e20bcdfddcff87255f84345b163b4998523cce7c8f0ac94516b1"
+  }
+}

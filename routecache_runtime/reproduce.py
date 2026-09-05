@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Any
 from huggingface_hub import hf_hub_download, snapshot_download
 from .profile import load_profile, repo_root
+from .bake import bake_file
 from .util import log, read_json, write_json
 
 UPSTREAM_REPO="Qwen/Qwen3.8-27B"
@@ -149,18 +150,26 @@ def reproduce(keep_intermediates=False):
     bf16=work/'Qwen3.8-27B-BF16.gguf'; _run([sys.executable,src/'convert_hf_to_gguf.py',upstream,'--outfile',bf16,'--outtype','bf16'],cwd=src,timeout=14400)
     imatrix=Path(hf_hub_download(repo_id=REFERENCE_REPO,filename=IMATRIX_FILE,repo_type='model',local_dir=str(work/'recipe')))
     quant=_download_repro_tools(root,profile) or _build_quantizer(src,work)
-    out=root/'models'/profile['model_filename']; out.parent.mkdir(parents=True,exist_ok=True); tmp=Path(str(out)+'.building')
-    if tmp.exists():tmp.unlink()
+    out=root/'models'/profile['model_filename']; out.parent.mkdir(parents=True,exist_ok=True)
+    plain=work/'Qwen3.8-27B-UD-IQ2_S-plain.gguf'
+    if plain.exists():plain.unlink()
     threads=max(1,min(os.cpu_count() or 6,12))
-    _run([quant,'--imatrix',imatrix,'--tensor-type-file',typemap,'--prune-layers','64','--override-kv','qwen35.block_count=int:64','--override-kv','qwen35.nextn_predict_layers=int:0',bf16,tmp,'IQ2_S',str(threads)],timeout=21600)
-    if not tmp.exists() or tmp.stat().st_size<7*1024**3:raise RuntimeError('quantizer produced no plausible GGUF')
-    st=_validate(tmp,ref)
+    _run([quant,'--imatrix',imatrix,'--tensor-type-file',typemap,'--prune-layers','64','--override-kv','qwen35.block_count=int:64','--override-kv','qwen35.nextn_predict_layers=int:0',bf16,plain,'IQ2_S',str(threads)],timeout=21600)
+    if not plain.exists() or plain.stat().st_size<7*1024**3:raise RuntimeError('quantizer produced no plausible GGUF')
+    st=_validate(plain,ref)
     if not st['same_tensor_names'] or not st['same_tensor_types'] or st['block_count']!=64 or int(st.get('nextn_predict_layers') or 0)!=0:raise RuntimeError(f'reproduced topology/type validation failed: {st}')
+    plain_digest=sha256(plain)
+    tmp=Path(str(out)+'.building')
+    if tmp.exists():tmp.unlink()
+    baked=bake_file(plain,tmp,profile)
+    if not baked.get('tensor_payload_identical'):raise RuntimeError('RouteCache metadata bake changed tensor payload')
     tmp.replace(out); digest=sha256(out)
-    report={'schema':1,'status':'ready','upstream_repo':UPSTREAM_REPO,'reference_recipe_repo':REFERENCE_REPO,'reference_file':REFERENCE_FILE,'reference_sha256':REFERENCE_SHA256,'output':str(out.resolve()),'output_sha256':digest,'byte_identical_to_reference':digest.lower()==REFERENCE_SHA256.lower(),'structure':st,'llama_commit':profile['llama_commit'],'recipe':'official Qwen BF16 + Unsloth public imatrix/per-tensor UD-IQ2_S recipe + MTP prune/metadata rewrite'}
+    report={'schema':1,'status':'ready','upstream_repo':UPSTREAM_REPO,'reference_recipe_repo':REFERENCE_REPO,'reference_file':REFERENCE_FILE,'reference_sha256':REFERENCE_SHA256,'plain_quant_sha256':plain_digest,'plain_quant_byte_identical_to_reference':plain_digest.lower()==REFERENCE_SHA256.lower(),'output':str(out.resolve()),'output_sha256':digest,'gguf_profile_embedded':True,'tensor_payload_sha256':baked.get('tensor_payload_sha256'),'tensor_payload_identical':baked.get('tensor_payload_identical'),'structure':st,'llama_commit':profile['llama_commit'],'recipe':'official Qwen BF16 + Unsloth public imatrix/per-tensor UD-IQ2_S recipe + MTP prune/metadata rewrite + RouteCache GGUF metadata bake'}
     write_json(root/'runtime'/'reproduction_report.json',report)
     if not keep_intermediates:
         shutil.rmtree(work/'qwen-upstream',ignore_errors=True)
         try:bf16.unlink()
+        except Exception:pass
+        try:plain.unlink()
         except Exception:pass
     return report

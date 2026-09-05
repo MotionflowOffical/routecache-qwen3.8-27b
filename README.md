@@ -1,6 +1,6 @@
 # RouteCache — Qwen3.8-27B UD-IQ2_S
 
-Clean public runtime, one-click Windows installer, direct Ollama support, and optional full model reproduction.
+Clean public runtime, GGUF-embedded RouteCache execution profile, one-click Windows installer, direct Ollama support, and optional full model reproduction.
 
 ## One-click RouteCache
 
@@ -50,3 +50,8 @@ The explicit measured route is only selected on the matching RTX 4060 8 GB profi
 - `REBUILD_KERNEL.bat` — retry custom GPU runtime
 - `CREATE_OLLAMA.bat` — create local Ollama model after GGUF download
 - `DIAGNOSTICS.bat` — environment/runtime state
+
+
+## Embedded RouteCache metadata
+
+The GGUF contains namespaced `routecache.*` metadata including the certified RTX 4060 tensor route, context/batch/ubatch/KV settings, warm-up/context-compaction policy, source GGUF SHA-256 and calibration metadata. The RouteCache runtime reads `routecache.profile.json` from the GGUF at launch. Stock llama.cpp/Ollama may ignore these custom keys and load the same tensors normally.

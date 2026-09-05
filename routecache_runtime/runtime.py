@@ -55,8 +55,8 @@ def server_command(server: Path, model: Path, route: dict[str,Any], port: int, u
 
 
 def serve(port: int=8080, ui: bool=False, warmup: bool=True, compact: bool=True) -> int:
-    root=repo_root(); profile=load_profile(); manifest=_runtime_manifest(root)
-    server=Path(manifest['server']); model=Path(manifest['model'])
+    root=repo_root(); manifest=_runtime_manifest(root)
+    server=Path(manifest['server']); model=Path(manifest['model']); profile=load_profile(model)
     if not server.exists(): raise RuntimeError(f'missing llama-server: {server}')
     if not model.exists(): raise RuntimeError(f'missing model: {model}')
     route, certified=route_for_hardware(profile)

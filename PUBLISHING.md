@@ -1,12 +1,10 @@
 # Maintainer release notes
 
-This source repository is intentionally kept small and contains no GGUF weights or bundled CUDA binaries.
+The public source repository contains no GGUF weights or bundled CUDA binaries.
 
 Release layout:
+- source code -> GitHub repository, updated through normal Git commits;
+- fallback/reproduction ZIPs -> GitHub Release assets (their SHA values are recorded in committed `RELEASE_ASSETS.json`);
+- baked GGUF + model card + Ollama files -> Hugging Face model repository.
 
-- source code -> GitHub repository;
-- `RouteCache-win-x64-cuda-fallback.zip` -> GitHub Release asset;
-- `RouteCache-win-x64-repro-tools.zip` -> GitHub Release asset for the advanced source reproducer;
-- GGUF + model card + RouteCache profile + Ollama files -> Hugging Face model repository.
-
-The maintainer's RouteCache Ultimate Publisher builds and validates these trees before upload. Do not publish the private optimizer workspace, calibration state, local manifests, absolute Windows paths, or access tokens.
+The private RouteCache Release Builder only prepares/validates staging. Remote publication is manual. Modified GitHub files are replaced through `git add -A` / `git commit` / `git push`; Hugging Face changes are made by an explicit `hf upload` Hub commit.

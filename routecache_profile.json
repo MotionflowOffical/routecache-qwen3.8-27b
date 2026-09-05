@@ -4,7 +4,7 @@
   "model_filename": "Qwen3.8-27B-UD-IQ2_S-RouteCache.gguf",
   "hf_repo": "CyberGamer/Qwen3.8-27B-UD-IQ2_S-RouteCache-GGUF",
   "github_repo": "MotionflowOffical/routecache-qwen3.8-27b",
-  "fallback_runtime_url": "https://github.com/MotionflowOffical/routecache-qwen3.8-27b/releases/download/v1.2.0/RouteCache-win-x64-cuda-fallback.zip",
+  "fallback_runtime_url": "https://github.com/MotionflowOffical/routecache-qwen3.8-27b/releases/download/v1.3.0/RouteCache-win-x64-cuda-fallback.zip",
   "llama_commit": "3d3d7c81813067fc8c185da017e0af03b4269b1e",
   "certified_hardware": {
     "gpu": "NVIDIA GeForce RTX 4060 8GB",
@@ -40,7 +40,7 @@
     "default_arch": "89",
     "jobs": 6
   },
-  "repro_tools_url": "https://github.com/MotionflowOffical/routecache-qwen3.8-27b/releases/download/v1.2.0/RouteCache-win-x64-repro-tools.zip",
+  "repro_tools_url": "https://github.com/MotionflowOffical/routecache-qwen3.8-27b/releases/download/v1.3.0/RouteCache-win-x64-repro-tools.zip",
   "reproduction": {
     "upstream_repo": "Qwen/Qwen3.8-27B",
     "reference_recipe_repo": "unsloth/Qwen3.8-27B-GGUF",
@@ -49,6 +49,8 @@
     "reference_sha256": "7897d2c5a5cee46aef50895141b2c8a0803c1185f3d03c4fda4cd137a7ad77fe",
     "minimum_temp_disk_gib": 120
   },
-  "model_sha256": "7897d2c5a5cee46aef50895141b2c8a0803c1185f3d03c4fda4cd137a7ad77fe",
-  "model_bytes": 8371970048
+  "model_sha256": "7831fa7a58874bfac0f5b8b8619aba6965cc7c847273f8d0882ef7acb6d7645c",
+  "model_bytes": 8371972256,
+  "gguf_profile_embedded": true,
+  "source_gguf_sha256": "7897d2c5a5cee46aef50895141b2c8a0803c1185f3d03c4fda4cd137a7ad77fe"
 }
