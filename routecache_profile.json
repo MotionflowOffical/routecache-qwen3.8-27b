@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "model_name": "Qwen3.8-27B-UD-IQ2_S-RouteCache",
+  "model_filename": "Qwen3.8-27B-UD-IQ2_S-RouteCache.gguf",
+  "hf_repo": "CyberGamer/Qwen3.8-27B-UD-IQ2_S-RouteCache-GGUF",
+  "github_repo": "MotionflowOffical/routecache-qwen3.8-27b",
+  "fallback_runtime_url": "https://github.com/MotionflowOffical/routecache-qwen3.8-27b/releases/download/v1.2.0/RouteCache-win-x64-cuda-fallback.zip",
+  "llama_commit": "3d3d7c81813067fc8c185da017e0af03b4269b1e",
+  "certified_hardware": {
+    "gpu": "NVIDIA GeForce RTX 4060 8GB",
+    "compute_capability": "8.9",
+    "vram_mib_min": 7000,
+    "vram_mib_max": 9000,
+    "system_ram_gib": 16
+  },
+  "quality": {
+    "teacher_ppl": 1.55,
+    "candidate_ppl": 1.6384,
+    "ppl_ratio": 1.0570322581,
+    "max_ppl_ratio": 1.08
+  },
+  "calibration": {
+    "stable_tps_floor": 11.3916054301,
+    "mtp_not_enabled_in_public_production": true
+  },
+  "certified_route": {
+    "mode": "certified-explicit",
+    "name": "refine-embed+upgate-win-33-46-b256u128-b256u64",
+    "context": 4096,
+    "batch": 256,
+    "ubatch": 64,
+    "kv": "q8_0",
+    "override": "token_embd\\.weight=CPU;blk\\.(?:33|34|35|36|37|38|39|40|41|42|43|44|45|46)\\.ffn_(?:up|gate).*\\.weight=CPU"
+  },
+  "portable_route": {
+    "mode": "portable-auto-fit",
+    "context": 4096
+  },
+  "kernel": {
+    "default_arch": "89",
+    "jobs": 6
+  },
+  "repro_tools_url": "https://github.com/MotionflowOffical/routecache-qwen3.8-27b/releases/download/v1.2.0/RouteCache-win-x64-repro-tools.zip",
+  "reproduction": {
+    "upstream_repo": "Qwen/Qwen3.8-27B",
+    "reference_recipe_repo": "unsloth/Qwen3.8-27B-GGUF",
+    "reference_file": "Qwen3.8-27B-UD-IQ2_S.gguf",
+    "imatrix_file": "imatrix_unsloth.gguf",
+    "reference_sha256": "7897d2c5a5cee46aef50895141b2c8a0803c1185f3d03c4fda4cd137a7ad77fe",
+    "minimum_temp_disk_gib": 120
+  },
+  "model_sha256": "7897d2c5a5cee46aef50895141b2c8a0803c1185f3d03c4fda4cd137a7ad77fe",
+  "model_bytes": 8371970048
+}

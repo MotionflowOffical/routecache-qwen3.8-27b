@@ -1,0 +1,7 @@
+.venv/
+models/
+runtime/
+__pycache__/
+*.pyc
+*.gguf
+*.zip

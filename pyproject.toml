@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=70"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "routecache-qwen-runtime"
+version = "1.2.0"
+description = "Public runtime/installer for the RouteCache Qwen3.8-27B IQ2_S profile"
+requires-python = ">=3.10"
+dependencies = ["huggingface_hub>=0.34", "hf_xet>=1.1", "requests>=2.32"]
+
+[project.scripts]
+routecache-runtime = "routecache_runtime.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["routecache_runtime*"]
